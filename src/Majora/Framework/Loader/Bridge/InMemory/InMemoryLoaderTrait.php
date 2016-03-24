@@ -74,7 +74,7 @@ trait InMemoryLoaderTrait
         $this->assertDatastoreIsReady();
 
         foreach ($entityData as $data) {
-            $this->registerEntity($this->normalizer->normalize(
+            $this->registerEntity($this->normalizer->denormalize(
                 $data,
                 $this->entityCollection->getEntityClass()
             ));
@@ -92,7 +92,7 @@ trait InMemoryLoaderTrait
     {
         $this->assertDatastoreIsReady();
 
-        if (!is_subclass_of($entity, $this->entityCollection->getEntityClass())) {
+        if (!is_a($entity, $this->entityCollection->getEntityClass())) {
             throw new \InvalidArgumentException(sprintf('Only "%s" object allowed into "%s" store, "%s" given.',
                 $this->entityCollection->getEntityClass(),
                 get_class($this),

@@ -29,6 +29,29 @@ trait DoctrineLoaderTrait
     }
 
     /**
+     * Checks if loader is properly configured.
+     *
+     * @throws \RuntimeException if not configured
+     */
+    private function assertIsConfigured()
+    {
+        if (!$this->entityClass || !$this->collectionClass || !$this->filterResolver) {
+            throw new \RuntimeException(sprintf(
+                '%s methods cannot be used while it has not been initialize through %s::configureMetadata().',
+                static::class,
+                static::class
+            ));
+        }
+        if (!$this->entityRepository) {
+            throw new \RuntimeException(sprintf(
+                'You must provide %s entity Doctrine repository throught %s::__construct() method to use this loader.',
+                $this->entityClass,
+                static::class
+            ));
+        }
+    }
+
+    /**
      * Hook called with every entity or collection loaded through this loader.
      *
      * @param CollectionnableInterface|EntityCollection $entity
@@ -45,7 +68,7 @@ trait DoctrineLoaderTrait
     /**
      * Convert given array or Collection result set to managed entity collection class.
      *
-     * @param array|Collection $result [description]
+     * @param array|Collection $result
      *
      * @return EntityCollection
      */
